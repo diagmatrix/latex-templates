@@ -33,3 +33,17 @@ Elementos a añadir para que funcione:
 | 56 | Autores (pdf) |
 | 223 | Título (documento) |
 | 225 | Subtítulo |
+
+#### Entornos
+```
+\begin{tipo}[nombre]
+texto
+\end{tipo}
+```
+ - Teoremas: `teo`
+ - Lemas: `lem`
+ - Definiciones: `def`
+ - Corolarios: `cor`
+ - Demostraciones: `proof`
+ - Ejemplos: `eje`
+ - Notas: `ano`
