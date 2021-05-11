@@ -27,18 +27,12 @@
 
 % Insitución
 \newcommand{\institucion}{
-	Una institución
 }
 % Año o cualquier otra información para la portada
 \newcommand{\fecha}{
-	Un año
 }
 % Autores del documento
 \newcommand{\autores}{
-	Autor 1 \hfill
-	Autor 2 \hfill
-	Autor 3 \hfill
-	Autor 4
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -214,7 +208,6 @@
 
 \renewcommand{\contentsname}{Índice} % Cambiar el título del índice
 \setlength\parindent{0pt} % Tamaño de la sangría
-\usepackage{blindtext} % Texto de relleno (Se puede eliminar)
 
 \begin{document}
 
@@ -249,33 +242,5 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DOCUMENTO
-
-\section{Marcos y código}
-Hola esto es un link: \url{https://github.com/diagmatrix}.
-\begin{mdframed}[style=ejemplos]
-Para escribir texto dentro de este marco, hay que ponerlo dentro de: \\
-\textbackslash begin\{mdframed\}[style=ejemplos]\\
-\textbackslash end\{mdframed\}\\
-\blindtext
-\end{mdframed}
-\begin{mdframed}[style=definiciones]
-	Para escribir texto dentro de este marco, hay que ponerlo dentro de: \\
-\textbackslash begin\{mdframed\}[style=definiciones]\\
-\textbackslash end\{mdframed\}\\
-\blindtext
-\end{mdframed}
-\begin{lstlisting}
-// This is a test
-#include<iostream>
-
-int main() {
-	while (true)
-		std::cout<<"Hello World\n";
-	
-	return 0;
-}
-\end{lstlisting}
-\newpage
-\Blinddocument
 
 \end{document}
