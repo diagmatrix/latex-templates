@@ -18,3 +18,18 @@ Elementos a añadir para que funcione:
 | 220 | Logo |
 | 227 | Título (documento) |
 | 229 | Subtítulo |
+
+## `diagmatrix-trabajos-matematicas`
+
+Plantilla para trabajos/memorias. Como ejemplo: [pdf-ejemplo-mates](ejemplos/diagmatrix-trabajos-matematicas.pdf).
+
+Elementos a añadir para que funcione:
+| Línea | Texto a añadir |
+|:-----:|----------------|
+| 28 | Institución |
+| 31 | Fecha |
+| 34 | Autores (documento) |
+| 55 | Título (pdf) |
+| 56 | Autores (pdf) |
+| 223 | Título (documento) |
+| 225 | Subtítulo |
