@@ -1,0 +1,2 @@
+titlepage-bg    - titlepage backgroundcolor (HTML)
+titleicon       - titlepage icon (path)

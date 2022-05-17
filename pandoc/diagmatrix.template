@@ -1,0 +1,53 @@
+% From https://pandoc.org/MANUAL.html#template-syntax 
+% and the default LaTeX template for pandoc
+% and https://github.com/diagmatrix/latex-templates
+% Author: diagmatrix 2022
+% License: GPL-3.0 (https://www.gnu.org/licenses/gpl-3.0.en.html)
+
+% -----------------------------------------------------------------------------
+% COLORS
+\usepackage{xcolor}
+% Titlepage colors
+$if(titlepage-bg)$
+\definecolor{titlepage_bg}{HTML}{$titlepage-bg$}
+$else$
+\definecolor{titlepage_bg}{HTML}{8A0808}
+$endif$
+
+% -----------------------------------------------------------------------------
+% GRAPHICS
+$if(graphics)$
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+$endif$
+
+% -----------------------------------------------------------------------------
+% LANGUAGE
+$if(lang)$
+\usepackage[bidi=default]{babel}
+\babelprovide[main,import]{$babel-lang$}
+$for(babel-otherlangs)$
+\babelprovide[import]{$babel-otherlangs$}
+$endfor$
+\let\LanguageShortHands\languageshorthands%
+\def\languageshorthands#1{}
+$endif$
+
+% -----------------------------------------------------------------------------
+% TITLEPAGE
+\begin{titlepage}
+    \newpagecolor{titlepage_bg}
+    \centering
+    $if(titleicon)$
+    \includegraphics[width=0.15\textwidth]{$titleicon$} \\
+	\vspace{2em}
+    $endif$
+\end{titlepage}
+\restorepagecolor%
