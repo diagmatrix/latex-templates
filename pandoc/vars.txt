@@ -1,2 +1,56 @@
-titlepage-bg    - titlepage backgroundcolor (HTML)
-titleicon       - titlepage icon (path)
+titlepage-bg            - titlepage background color (html)
+titleicon               - titlepage icon (path)
+institute               - institution
+titlepage-fg            - titlepage foreground color (html)
+no-frames               - remove frames
+no-numberline           - removes number lines from code
+codelang                - language of the code
+codeframe-color-line    - Color of the line of the frames for code
+codeframe-color-bg      - Color of the background of the frames for code
+listcolor-level-X       - Color of the symbol of the level X list
+------------------------------------
+title               YES
+author              YES
+date                YES
+subtitle            YES
+thanks              YES
+abstract            YES
+abstract-title      YES
+lof                 YES
+lot                 YES
+toc                 YES
+linestretch         YES
+biblatexoptions     YES
+natbiboptions       YES
+biblio-style        YES
+biblio-title        YES
+bibliography        YES
+hyperrefoptions     YES
+keywords            YES
+subject             YES
+lang                YES
+colorlinks          YES
+linkcolor           YES
+filecolor           YES
+citecolor           YES
+urlcolor            YES
+geometry            YES
+classoption         YES
+documentclass       YES
+fontsize            YES
+papersize           YES
+margin-top          YES
+margin-left         YES
+margin-right        YES
+margin-bottom       YES
+fontfamily          YES
+fontfamilyoptions   YES
+links-as-notes      YES
+block-headings      YES
+indent              YES
+pagestyle           YES
+secnumdepth         YES
+fontenc             YES
+microtypeoptions    YES
+toc-depth           YES
+headers-includes    YES

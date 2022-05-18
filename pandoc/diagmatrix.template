@@ -5,14 +5,184 @@
 % License: GPL-3.0 (https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 % -----------------------------------------------------------------------------
-% COLORS
+% DOCUMENTCLASS
+\documentclass[
+$if(fontsize)$
+    $fontsize$,
+$endif$
+$if(papersize)$
+    $papersize$paper,
+$endif$
+$for(classoption)$
+$classoption$$sep$,
+$endfor$
+titlepage
+]{$documentclass$}
+
+% -----------------------------------------------------------------------------
+% PACKAGE IMPORTS (CONFIGURED LATER OR NOT NEEDED TO BE CONFIGURED)
+% Bibliography
+$if(natbib)$
+\usepackage[$natbiboptions$]{natbib}
+\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+$if(biblatex)$
+\usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+$endif$
+% Line stretch
+$if(linestretch)$
+\usepackage{setspace}
+$endif$
+% Titlepage background color
+\usepackage{pagecolor}
+% Margins
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
+% Math
+\usepackage{amsmath,amssymb,amsfonts}
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+\usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+% Lists
+\usepackage{enumitem}
+
+% -----------------------------------------------------------------------------
+% FONT (https://tug.org/FontCatalogue/bitter/)
+$if(fontfamily)$
+\usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
+$else$
+\usepackage{bitter}
+$endif$
+\usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp} % provide euro and other symbols
+
+% -----------------------------------------------------------------------------
+% COLORS USED INSIDE THE DOCUMENT
+$if(colorlinks)$
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+$endif$
 \usepackage{xcolor}
+% Default colors
+\definecolor{url_color}{HTML}{610505}
 % Titlepage colors
 $if(titlepage-bg)$
 \definecolor{titlepage_bg}{HTML}{$titlepage-bg$}
 $else$
 \definecolor{titlepage_bg}{HTML}{8A0808}
 $endif$
+$if(titlepage-fg)$
+\definecolor{titlepage_fg}{HTML}{$titlepage-fg$}
+$else$
+\definecolor{titlepage_fg}{HTML}{FFFFFF}
+$endif$
+
+% -----------------------------------------------------------------------------
+% CODE LISTINGS
+$if(listings)$
+\usepackage{listingsutf8}
+\lstset{
+$if(no-numberline)$
+$else$
+    numbers=left,
+    numberstyle=\ttfamily,
+    frame=leftline,
+    framerule=0.1pt,
+$endif$
+    basicstyle=\footnotesize\ttfamily,
+    inputencoding=utf8/latin1,
+    breaklines=true,
+    commentstyle=\itshape,
+    showstringspaces=false,
+    captionpos=b,
+$if(codelang)$
+    language=$codelang$,
+$endif$
+}
+$endif$
+
+% -----------------------------------------------------------------------------
+% FRAMES
+$if(no-frames)$
+$else$
+\usepackage[xcolor,framemethod=tikz]{mdframed}
+\mdfsetup{
+    skipabove=1em,
+    skipbelow=1em,
+    innertopmargin=1em,
+    innerbottommargin=1em,
+    splittopskip=2\topsep,
+    usetwoside=false,
+}
+% Code frame colors
+$if(codeframe-color-line)$
+\definecolor{codeframe_line}{HTML}{$codeframe-color-line$}
+$else$
+\definecolor{codeframe_line}{HTML}{8A0808}
+$endif$
+$if(codeframe-color-bg)$
+\definecolor{codeframe_bg}{HTML}{$codeframe-color-bg$}
+$else$
+\definecolor{codeframe_bg}{HTML}{FFEDEE}
+$endif$
+% Code frame
+\mdfdefinestyle{code}{
+    innerleftmargin=2em,
+    linewidth=0.4pt,
+    roundcorner=10pt,
+    linecolor=codeframe_line,
+    backgroundcolor=codeframe_bg,   
+}
+\surroundwithmdframed[style=code]{lstlisting}
+$endif$
+
+% -----------------------------------------------------------------------------
+% CUSTOM & BASE COMMANDS
+% Title
+$if(title)$
+\title{$title$}
+$endif$
+\makeatletter
+\let\inserttitle\@title%
+\makeatother
+% Subtitle
+\newcommand{\subtitle}{$if(subtitle)$$subtitle$$endif$}
+% Author
+$if(author)$
+\author{$for(author)$$author$ $sep$ \and $endfor$}
+$endif$
+\makeatletter
+\let\insertauthor\@author%
+\makeatother
+% Date
+$if(date)$
+\date{$date$}
+$else$
+\date{\today}
+$endif$
+\makeatletter
+\let\insertdate\@date%
+\makeatother
+% Institute
+\newcommand{\institution}{$if(institute)$$institute$$endif$}
+
+% -----------------------------------------------------------------------------
+% COMMAND & ENVIRONMENT OVERWIRTES
+% Abstract
+\makeatletter
+\renewenvironment{abstract}{%
+\begin{center}
+    {\bfseries\LARGE\abstractname\vspace{\z@}}
+\end{center}
+}
+\makeatother
 
 % -----------------------------------------------------------------------------
 % GRAPHICS
@@ -29,6 +199,91 @@ $if(graphics)$
 $endif$
 
 % -----------------------------------------------------------------------------
+% HYPERREF
+\PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+    pdftitle={$if(title-meta)$$title-meta$$endif$},
+    pdfauthor={$if(author-meta)$$author-meta$$endif$},
+    pdflang={$if(lang)$$lang$$endif$},
+    pdfsubject={$if(subject)$$subject$$endif$},
+    pdfkeywords={$if(keywords)$$for(keywords)$$keywords$$sep$, $endfor$$endif$},
+    $if(colorlinks)$
+    colorlinks=true,
+    linkcolor={$if(linkcolor)$$linkcolor$$else$black$endif$},
+    filecolor={$if(filecolor)$$filecolor$$else$black$endif$},
+    citecolor={$if(citecolor)$$citecolor$$else$black$endif$},
+    urlcolor={$if(urlcolor)$$urlcolor$$else$url_color$endif$},
+    $else$
+    hidelinks,
+    $endif$
+    pdfcreator={LaTeX via diagmatrix pandoc template},
+}
+\urlstyle{same}
+
+% -----------------------------------------------------------------------------
+% TABLES
+$if(tables)$
+\usepackage{longtable,booktabs,array}
+$if(multirow)$
+\usepackage{multirow}
+$endif$
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+$endif$
+
+% -----------------------------------------------------------------------------
+% LISTS
+% List colors
+\definecolor{list_level_1}{HTML}{$if(listcolor-level-1)$$listcolor-level-1$$else$8A0808$endif$}
+\definecolor{list_level_2}{HTML}{$if(listcolor-level-2)$$listcolor-level-2$$else$610505$endif$}
+\definecolor{list_level_3}{HTML}{$if(listcolor-level-3)$$listcolor-level-3$$else$300303$endif$}
+\definecolor{list_level_4}{HTML}{$if(listcolor-level-4)$$listcolor-level-4$$else$000000$endif$}
+% List symbols
+\renewcommand{\labelitemi}{\color{list_level_1}$$\bullet$$}
+\renewcommand{\labelitemii}{\color{list_level_2}$$\circ$$}
+\renewcommand{\labelitemiii}{\color{list_level_3}$$\diamond$$}
+\renewcommand{\labelitemiv}{\color{list_level_4}$$-$$}
+% Enumeration symbols
+\renewcommand{\labelenumi}{\color{list_level_1}\bfseries\arabic{enumi}.}
+\renewcommand{\labelenumii}{\color{list_level_2}\bfseries\Roman{enumii}.}
+\renewcommand{\labelenumiii}{\color{list_level_3}\bfseries(\alph{enumiii})}
+\renewcommand{\labelenumiv}{\color{list_level_4}\bfseries\Alph{enumiv}.}
+% Description
+\renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\color{list_level_1}\textbf{#1}}
+
+% -----------------------------------------------------------------------------
+% SECTIONS
+% Section numbering
+$if(numbersections)$
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+$endif$
+\setcounter{tocdepth}{$if(toc-depth)$$toc-depth$$else$3$endif$}
+% Paragraph & subparagraph
+$if(block-headings)$
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+$endif$
+
+% -----------------------------------------------------------------------------
 % LANGUAGE
 $if(lang)$
 \usepackage[bidi=default]{babel}
@@ -41,6 +296,67 @@ $endfor$
 $endif$
 
 % -----------------------------------------------------------------------------
+% INDENT
+$if(indent)$
+$else$
+\setlength\parindent{0pt}
+$endif$
+
+% -----------------------------------------------------------------------------
+% MISC THINGS & THAT I DON'T UNDERSTAND
+% Links as footnotes
+$if(links-as-notes)$
+\DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+% Strikeout
+$if(strikeout)$
+\usepackage[normalem]{ulem}
+% Avoid problems with \sout in headers with hyperref
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+$endif$
+% Custom pagestyle
+$if(pagestyle)$
+\pagestyle{$pagestyle$}
+$endif$
+
+$if(verbatim-in-note)$
+\usepackage{fancyvrb}
+\VerbatimFootnotes
+$endif$
+
+$if(zero-width-non-joiner)$
+%% Support for zero-width non-joiner characters.
+\makeatletter
+\def\zerowidthnonjoiner{%
+  % Prevent ligatures and adjust kerning, but still support hyphenating.
+  \texorpdfstring{%
+    \textormath{\nobreak\discretionary{-}{}{\kern.03em}%
+      \ifvmode\else\nobreak\hskip\z@skip\fi}{}%
+  }{}%
+}
+\makeatother
+\DeclareUnicodeCharacter{200C}{\zerowidthnonjoiner}
+$endif$
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+    \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}
+}
+
+% -----------------------------------------------------------------------------
+% EXTRA HEADERS
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+% -----------------------------------------------------------------------------
+\begin{document}
+
+% -----------------------------------------------------------------------------
 % TITLEPAGE
 \begin{titlepage}
     \newpagecolor{titlepage_bg}
@@ -49,5 +365,98 @@ $endif$
     \includegraphics[width=0.15\textwidth]{$titleicon$} \\
 	\vspace{2em}
     $endif$
+    $if(institute)$
+    \color{titlepage_fg}{\Large{\textbf{\institution}}} \\
+    $endif$
+    \color{titlepage_fg}{\textit{\insertdate}}
+    \vfill
+    \raggedright%
+    \color{titlepage_fg}{
+        \fontsize{70pt}{70pt}{\textbf{\inserttitle}} \\
+        \vspace{1em}
+        \fontsize{40pt}{40pt}{\textit{\subtitle}}
+    }
+    \vfill
+    \centering
+    \color{titlepage_fg}{\Large{\insertauthor}}
 \end{titlepage}
 \restorepagecolor%
+
+% -----------------------------------------------------------------------------
+% FRONTMATTER & PRE-BODY EXTRA CONFIGURATION
+$if(has-frontmatter)$
+\frontmatter
+$endif$
+% Thanks
+$if(thanks)$
+\vspace*{\fill}
+\textit{$thanks$}
+\vfill
+\clearpage
+$endif$
+% Abstract
+$if(abstract)$
+$if(abstract-title)$
+\renewcommand{\abstractname}{$abstract-title$}
+$endif$
+\begin{abstract}
+    $abstract$
+\end{abstract}
+\clearpage
+$endif$
+% Copied from default template (idk what it does)
+$for(include-before)$
+$include-before$
+$endfor$
+% Table of contents
+$if(toc)$
+\tableofcontents
+\clearpage
+$endif$
+% List of figures
+$if(lof)$
+\listoffigures
+\clearpage
+$endif$
+% List of tables
+$if(lot)$
+\listoftables
+\clearpage
+$endif$
+% Line stretch of the document
+$if(linestretch)$
+\setstretch{$linestretch$}
+$endif$
+
+% -----------------------------------------------------------------------------
+% BODY
+$if(has-frontmatter)$
+\mainmatter%
+$endif$
+$body$
+
+% -----------------------------------------------------------------------------
+% BACKMATTER & BIBLIOGRAPHY
+$if(has-frontmatter)$
+\backmatter%
+$endif$
+% Bibiliography
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+$if(has-chapters)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+$endif$
+$endif$
+% Copied from default template (idk what it does)
+$for(include-after)$
+$include-after$
+$endfor$
+        
+% -----------------------------------------------------------------------------
+\end{document}
